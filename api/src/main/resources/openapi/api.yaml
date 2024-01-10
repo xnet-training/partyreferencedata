@@ -84,7 +84,7 @@ paths:
   /party/{id}:
     get:
       tags:
-      - Party
+      - party
       parameters:
       - name: id
         in: path
