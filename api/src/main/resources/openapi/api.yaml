@@ -1,0 +1,198 @@
+---
+openapi: 3.0.2
+info:
+  title: SD Party Reference Data
+  description: |
+    Permite gestionar los datos de referencias de las personas naturales o juridicas que forman parte del contexto de operación de los procesos de negocio. Pueden representan tanto a los clientes, proveedores de servicios y colaboradores de la organización.
+  contact:
+    name: ianache
+    email: ianache@crossnetcorp.com
+  license:
+    name: crossnetcorp License
+    url: https://www.crossnetcorp.com/license
+  version: 1.0.0-SNAPSHOT
+servers:
+- url: http://0.0.0.0:8082/customerreferencedata/api/v1
+  description: URL del endpoint
+tags:
+- name: Party
+  description: Microservicio Customer Reference Data
+paths:
+  /party:
+    post:
+      tags:
+      - Party
+      summary: Registro de una nueva persona natural o juridica
+      description: |
+        Esta funcionalidad permite realizar el registro de una nueva persona natural o jurídica.
+      operationId: newParty
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/NewPartyReferenceDataRequest"
+        required: true
+      responses:
+        201:
+          description: Persona creada
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIError"
+        400:
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIError"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIError"
+
+    get:
+      tags:
+      - Party
+      summary: Query registered parties
+      description: |
+        Esta funcionalidad permite realizar el registro de una nueva persona natural o jurídica.
+      operationId: searchParty
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PartiesSearchResponse"
+        400:
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIError"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIError"
+      security:
+      - bearerAuth: []
+      
+  /party/{id}:
+    get:
+      tags:
+      - Party
+      parameters:
+      - name: id
+        in: path
+        description: should be a unique identifier or a list of unique party identifies by comma delimited list.
+        example: "2343567,20537823329"
+        schema:
+          type: string
+        required: true
+      summary: Get party detail
+      operationId: getParty by unique identifier
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PartiesSearchResponse"
+        400:
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIError"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIError"
+      security:
+      - bearerAuth: []
+                
+components:
+  schemas:
+    APIError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 1000
+          description: Custom error code
+        message:
+          type: string
+          description: Custom error description
+        reason:
+          type: string
+          description: Detailed error explanation
+        location:
+          type: string
+          description: URI for failed endpoint
+        errors:
+          type: array
+          description: Specific errores detailed
+          items:
+            "$ref": "#/components/schemas/APIError"
+            
+    NewPartyReferenceDataRequest:
+      type: object
+      properties:
+        party:
+          type: object
+          description: Party detailed data
+          allOf: 
+          - "$ref": "#/components/schemas/PartyReferenceData"
+            
+    PartyReferenceData:
+      required:
+      - firstName
+      - birstDate
+      - lastName
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: Party first name
+        middleName:
+          type: string
+          description: Party middle name
+        lastName:
+          type: string
+          description: Party last name
+        birthDate:
+          type: string
+          format: date
+          description: Birth date (people) o registration date (organization)
+
+      
+    PartiesSearchResponse:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: Total items for query parameters
+        pages:
+          type: integer
+          description: Total item pages
+        pageSize:
+          type: integer
+          description: Total items per page
+        items:
+          type: array
+          description: Detailed items list
+          items:
+            $ref: "#/components/schemas/PartyReferenceData"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

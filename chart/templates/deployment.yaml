@@ -1,0 +1,151 @@
+{{ $connSecrets := include "chart.connectionSecret" . }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+#  annotations:
+#    "sidecar.jaegertracing.io/inject": "true"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "chart.selectorLabels" . | nindent 8 }}
+      annotations:
+        lastUpdate: {{ now | quote}}
+      {{- if .Values.vault.enabled }}
+      {{- toYaml .Values.vault.annotations | nindent 8 }} 
+      {{- end }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      hostAliases:
+        {{- toYaml .Values.hostAliases | nindent 8 }}
+      initContainers:
+        - name: init-cont
+          image: busybox:1.31
+          command:
+          - 'sh'
+          - '-c'
+          - 'echo -e "Verificando disponibilidad de MySQL";while ! nc -z {{ .Values.schema.name }}-database-mysql.database.svc.cluster.local 3306; do sleep 1; printf "-"; done;echo -e "  >> MySQL DB Server iniciado";'
+          resources:
+          {{- toYaml .Values.initContainers.resources | nindent 12 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: APP_PROFILE
+              value: {{ .Values.profile }}
+            - name: SPRING_PROFILES_ACTIVE #spring.profiles.active
+              value: kubernetes
+            #- name: SPRING_CONFIG_LOCATION
+            #  value: "/opt/config/"
+            - name: SERVER_PORT
+              value: "8080"
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $connSecrets }}
+                  key: USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $connSecrets }}
+                  key: PASSWORD
+            {{- if .Values.useMongoDB }}
+            - name: SPRING_DATA_MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $connSecrets }}
+                  key: MONGODB_USER
+            - name: SPRING_DATA_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $connSecrets }}
+                  key: MONGODB_PASSWORD
+            {{- end }}
+            {{- if .Values.useRabbitMQ }}
+            - name: SPRING_DATA_RABBITMQ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $connSecrets }}
+                  key: RABBITMQ_USER
+            - name: SPRING_DATA_RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $connSecrets }}
+                  key: RABBITMQ_PASSWORD
+            {{- end }}
+            {{- if .Values.useRedis }}
+            - name: SPRING_DATA_REDIS_SENTINEL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $connSecrets }}
+                  key: REDIS_SENTINEL_PASSWORD
+            - name: CACHE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $connSecrets }}
+                  key: REDIS_PASSWORD
+            {{- end }}
+            {{- range .Values.extraEnvVars }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+            {{- range .Values.extraEnvVarsFromSecret }}
+            - name: {{ .name | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .valueFrom.secretKeyRef.name }}
+                  key: {{ .valueFrom.secretKeyRef.key }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+          {{- if .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          - name: config
+            mountPath: "/opt/config"
+            readOnly: true
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "chart.fullname" . }}-cm
+          items:
+          - key: application-kubernetes.yaml
+            path: application.yml

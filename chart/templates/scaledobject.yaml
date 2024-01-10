@@ -1,0 +1,30 @@
+{{- if .Values.scaledobject.enabled -}}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ include "chart.fullname" . }}-sohpa
+  namespace: {{ .Values.scaledobject.namespace }} #default
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: {{ include "chart.fullname" . }}
+  pollingInterval:  30
+  cooldownPeriod:   300
+  idleReplicaCount: 0
+  minReplicaCount:  1
+  maxReplicaCount:  10
+  fallback:
+    failureThreshold: 3
+    replicas: 1
+  advanced:
+    restoreToOriginalReplicaCount: true #/false
+  triggers:
+  - type: cpu
+    metadata:
+      type: {{ .Values.scaledobject.cpu.type | quote }}
+      value: "{{ .Values.scaledobject.cpu.value }}"
+  - type: memory
+    metadata:
+      type: {{ .Values.scaledobject.memory.type }}
+      value: "{{ .Values.scaledobject.memory.value }}"
+{{- end }}

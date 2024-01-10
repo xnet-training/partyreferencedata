@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "chart.fullname" . }}-cm
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+data:
+  application-kubernetes.yaml: |-
+    config_source: kubernetes
+    management:
+      health:
+        defaults:
+          enabled: false
+        rabbit:
+          enabled: false
+      endpoints:
+        actuator:
+          enabled: true
+        web:
+          base-path: /{{ include "chart.name" . }}/actuator
+          exposure:
+            include: "*"
+    spring:
+      main:
+        allow-circular-references: true
+      datasource:
+        url: "jdbc:mysql://{{ .Values.schema.name }}-database-mysql-master.database.svc.cluster.local/{{ .Values.schema.name }}"
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      jpa:
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        show-sql: {{ .Values.schema.showSql }}
+        generate-ddl: false
+        hibernate:
+          dialect: org.hibernate.dialect.MySQLInnoDBDialect
+          ddl-auto: none 
+          jdbc.batch_size: 20
+          order_inserts: true
+          naming:
+            physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+            implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        properties:
+          hibernate:
+            default_schema: '{{ .Values.schema.name}}'
+      flyway:
+        enabled: true
+        baseline-on-migrate: true
+        check-location: false
+        locations: classpath:db/migration,classpath:db/callback
+        schemas: '{{ .Values.schema.name}}' 
+    logging:
+      level:
+        org:
+          springframework: ERROR
+    opentracing:
+      jaeger:
+        service-name: application
+        enabled: false
+        udp-sender:
+          host: jaeger-collector.observability.svc.cluster.local
+          port: 6831
+        const-sampler:
+          decision: true
+        log-spans: true
+    
+    springdoc:
+      api-docs:
+        path: /{{ include "chart.name" . }}/api-docs
+      swagger-ui:
+        path: /{{ include "chart.name" . }}/swagger-ui.html
+    
+    feign:
+      service:
+        host: http://api.crossnetcorp.com
+ 
+    keycloak:
+      enabled: {{ .Values.keycloak.enabled }}
+      auth-server-url: {{ include "chart.keycloak_url" . }}
+      realm: {{ .Values.keycloak.realm }} 
+      resource: {{ .Values.keycloak.client_id | quote}} 
+      {{- if .Values.keycloak.cors }}
+      cors: {{ .Values.keycloak.cors}}
+      {{- end }}
+      ssl-required: external
+      public-client: true
+      use-resource-role-mappings: false
+      credentials:
+        secret: {{ .Values.keycloak.client_secret|quote}} 
+      securityConstraints:
+        - authRoles: [integration]
+          securityCollections:
+            - patterns: ['/{{ include "chart.name" . }}/api/v1/*']

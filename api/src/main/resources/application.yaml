@@ -1,0 +1,52 @@
+
+management:
+  endpoints:
+    web:
+      exposure: 
+        include: prometheus,health,info,metrics
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+      cache:
+        time-to-live: 0ms
+  security:
+    enabled: false
+    
+server:
+  port: 8080
+  servlet:
+    contextPath: "/"
+
+service:
+  context: "/api/v1/"
+
+app:
+  name: partyreferencedata
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    operationsSorter: method
+    
+spring:
+  flyway:
+    # baseline-on-migrate: true
+    # check-location: false
+    # locations: classpath:db/migration
+    # schemas: partyreferencedata
+    enabled: false
+  boot:
+    web:
+      filter:
+        dispatch-types: REQUEST
+        RequestFilter:
+          order: 1
+elastic:
+  apm:
+    service_name: partyreferencedata
+    secret_token: changeme
+    server_url: http://172.17.8.220:8200
+    environment: dev
+    application_packages: com.crossnetcorp.banking

@@ -1,0 +1,92 @@
+
+config_source: dev
+  
+server:
+  port: 8082
+  servlet:
+    contextPath: "/"
+
+spring:
+  datasource:
+    url: "jdbc:mysql://172.17.8.220:3306/partyreferencedata"
+    username: microservicio
+    password: secret!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    platform: mysql
+    ddl-auto: create
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      dialect: org.hibernate.dialect.MySQLInnoDBDialect
+      ddl-auto: none # create
+      jdbc.batch_size: 20
+      order_inserts: true
+      naming: 
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+    properties:
+      hibernate:
+        default_schema: partyreferencedata
+  flyway:
+    enabled: false
+    baseline-on-migrate: true
+    check-location: false
+    locations: classpath:db/migration,classpath:db/callback
+    schemas: partyreferencedata
+  cloud:
+    vault:
+      token: root
+      scheme: http
+      host: 172.17.8.220
+      port: 8201
+      uri: http://172.17.8.220:8201
+      connection-timeout: 5000
+      read-timeout: 15000
+      config:
+        order: -10
+      kv:
+        enabled: true
+
+logging:
+  level:
+    org:
+      springframework: INFO
+    com:
+       crossnetcorp:
+         partyreferencedata: INFO
+            
+opentracing:
+  jaeger:
+    udp-sender:
+      host: 0.0.0.0
+      port: 6831
+    const-sampler:
+      decision: true
+    enabled: false
+    log-spans: true
+    service-name: SD Customer Loan
+    
+keycloak:
+  enabled: true
+  auth-server-url: https://oauth2.crossnetcorp.com/auth
+  realm: microservicios
+  resource: SD Customer Loan
+  ssl-required: external
+  public-client: true
+  use-resource-role-mappings: false
+  credentials:
+    secret: change-me
+  securityConstraints:
+  - authRoles: [read, write]
+    securityCollections:
+    - patterns: ['/api/v1/partyreferencedata/*']
+
+elastic:
+  apm:
+    service_name: partyreferencedata
+    secret_token: changeme
+    server_url: http://172.17.8.220:8200
+    environment: dev
+    application_packages: com.crossnetcorp.banking

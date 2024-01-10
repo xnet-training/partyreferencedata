@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+    <action>
+        <actionName>CUSTOM-Run SpringBot</actionName>
+        <displayName>Run SpringBoot</displayName>
+        <goals>
+            <goal>spring-boot:run</goal>
+        </goals>
+        <properties>
+            <spring.profiles.active>dev</spring.profiles.active>
+        </properties>
+    </action>
+    <action>
+        <actionName>CUSTOM-Run Springboot - Debug</actionName>
+        <displayName>Run Springboot - Debug</displayName>
+        <goals>
+            <goal>spring-boot:run</goal>
+        </goals>
+        <properties>
+            <spring.profiles.active>kubernetes</spring.profiles.active>
+        </properties>
+        <!--activatedProfiles>
+            <activatedProfile>dev</activatedProfile>
+        </activatedProfiles-->
+    </action>
+    <action>
+        <actionName>debug</actionName>
+        <packagings>
+            <packaging>jar</packaging>
+        </packagings>
+        <goals>
+            <goal>spring-boot:run</goal>
+        </goals>
+        <properties>
+            <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath pe.com.crossnetcorp.clocator.CLocatorApplication</exec.args>
+            <exec.executable>java</exec.executable>
+            <jpda.listen>true</jpda.listen>
+        </properties>
+    </action>
+</actions>

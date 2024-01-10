@@ -1,0 +1,26 @@
+# https://spring.io/guides/gs/vault-config/
+spring:
+  profiles:
+    active: dev
+  application:
+    name: 
+  cloud:
+    vault:
+      token: root
+      scheme: http
+      host: 172.17.8.220
+      port: 8200
+      uri: http://172.17.8.220:8200
+      connection-timeout: 5000
+      read-timeout: 15000
+      config:
+        order: -10
+      kv:
+        enabled: true
+elastic:
+  apm:
+    service_name: partyreferencedata
+    secret_token: changeme
+    server_url: http://172.17.8.220:8200
+    environment: dev
+    application_packages: com.crossnetcorp.banking

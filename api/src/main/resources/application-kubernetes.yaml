@@ -1,0 +1,77 @@
+config_source: kubernetes
+management:
+  health:
+    defaults:
+      enabled: false
+    rabbit:
+      enabled: false
+  endpoints:
+    actuator:
+      enabled: true
+    web:
+      base-path: /partyreferencedata/actuator
+      exposure:
+        include: "*"
+spring:
+  main:
+    allow-circular-references: true
+  datasource:
+    url: "jdbc:mysql://partyreferencedata-database-mysql-master.database.svc.cluster.local/partyreferencedata"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      dialect: org.hibernate.dialect.MySQLInnoDBDialect
+      ddl-auto: none
+      jdbc.batch_size: 20
+      order_inserts: true
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+    properties:
+      hibernate:
+        default_schema: 'partyreferencedata'
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    check-location: false
+    locations: classpath:db/migration,classpath:db/callback 
+    schemas: partyreferencedata
+logging:
+  level:
+    org:
+      springframework: ERROR
+opentracing:
+  jaeger:
+    service-name: application
+    enabled: false
+    udp-sender:
+      host: jaeger-collector.observability.svc.cluster.local
+      port: 6831
+    const-sampler:
+      decision: true
+    log-spans: true
+
+springdoc:
+  api-docs:
+    path: /partyreferencedata/api-docs
+  swagger-ui:
+    path: /partyreferencedata/swagger-ui.html
+
+keycloak:
+  enabled: true
+  auth-server-url: https://oauth2-api-qa.crossnetcorpsmart.com/auth
+  realm: microservicios
+  resource: "partyreferencedata"
+  cors: true
+  ssl-required: external
+  public-client: true
+  use-resource-role-mappings: false
+  credentials:
+    secret: "c9729701-818f-434c-93a9-1ff30939baf1"
+  securityConstraints:
+    - authRoles: [integration]
+      securityCollections:
+        - patterns: ['/partyreferencedata/api/v1/*']

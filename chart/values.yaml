@@ -1,0 +1,200 @@
+replicaCount: 1
+
+profile: kubernetes
+#environment: &env devXX
+
+image:
+  repository: xnet/partyreferencedata
+  tag: 0.1.0
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: crossnetcorp-regcred
+
+nameOverride: ""
+
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+extraEnvVars: []
+  #- name: SERVER_SERVLET_CONTEXT_PATH
+  #  value: "/partyreferencedata"
+
+extraEnvVarsFromSecret: []
+#  - name: FEIGN_SAPB1_SERVICE_APIGATEWAY_KEY
+#    valueFrom:
+#      secretKeyRef:
+#        name: sap-credentials
+#        key: apigw_key
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+hostAliases:
+  - ip: 141.148.63.53
+    hostnames:
+    - "keycloak.dev.crossnetcorp.com.pe"
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned
+    kubernetes.io/ingress.class: nginx
+    #nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+    #nginx.ingress.kubernetes.io/configuration-snippet:  rewrite ^/partyreferencedata$ $1/ permanent;
+    #nginx.ingress.kubernetes.io/rewrite-target: /$2
+    #nginx.ingress.kubernetes.io/use-regex: 'true'
+  hosts:
+    - host: api.dev.crossnetcorp.com.pe 
+      paths:
+      - "/partyreferencedata"
+  tls:
+  - secretName: api-tls
+    hosts:
+    - api.dev.crossnetcorp.com.pe
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 1
+    memory: 768Mi # 3Gi
+  requests:
+    cpu: 0.2
+    memory: 128Mi # 512Mi
+
+initContainers:
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 128Mi
+    limits:
+      cpu: 0.2
+      memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchExpressions:
+        - key: app
+          operator: In
+          values:
+          - partyreferencedata
+        - key: app.kubernetes.io/instance
+          operator: In
+          values:
+          - partyreferencedata
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - partyreferencedata
+      topologyKey: "kubernetes.io/hostname"
+  #- labelSelector:
+  #    matchExpressions:
+  #      key: app.kubernetes.io/instance
+  #      operator: In
+  #      values: 
+  #      - vehiculos
+  #  topologyKey: "kubernetes.io/hostname"
+  #- labelSelector:
+  #    matchExpressions:
+  #      key: app.kubernetes.io/name
+  #      operator: In
+  #      values: 
+  #      - vehiculos  
+  #   topologyKey: "kubernetes.io/hostname"
+
+scaledobject:
+  enabled: true
+  namespace: microservices
+  cpu:
+    type: Utilization
+    value: "80"
+  memory:
+    type: Utilization
+    value: "80"
+
+useMongoDB: false
+useRabbitMQ: false
+useRedis: false
+
+schema:
+  name: partyreferencedata
+  root: root
+  showSql: false
+  user: 
+    name: microservicio
+    password: "secr3t!"
+
+keycloak:
+  enabled: true
+  cors: true
+  url: 
+    scheme: https
+    dns: oauth2.crossnetcorp.com
+  realm: microservicios
+  client_id: partyreferencedata
+  client_secret: c0729700-818f-434c-93a9-1ff30939baf0
+
+readinessProbe: 
+  httpGet:
+    path: /partyreferencedata/actuator/health
+    port: http
+  initialDelaySeconds: 20
+  timeoutSeconds: 15
+  periodSeconds: 15
+  successThreshold: 1
+  failureThreshold: 3
+
+livenessProbe:
+  httpGet:
+    path: /partyreferencedata/actuator/health
+    port: http
+  initialDelaySeconds: 20
+  timeoutSeconds: 15
+  periodSeconds: 15
+  successThreshold: 1
+  failureThreshold: 3
+
+vault:
+  enabled: false
+  annotations:
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/role: "microservicio"
+    vault.hashicorp.com/agent-inject-secret-config: "secrets/microservicio/partyreferencedata"
+    # Environment variable export template
+    vault.hashicorp.com/agent-inject-template-config: |
+      {{ with secret "secrets/microservicio/partyreferencedata" -}}
+        export SPRING_DATASOURCE_PASSWORD="{{ .Data.data.db.password }}"
+        export SPRING_DATASOURCE_USERNAME="{{ .Data.data.db.username }}"
+      {{- end }}
+
+test: false
