@@ -13,7 +13,7 @@ services:
       # You can use whatever password you like
       MYSQL_PASSWORD: 'secr3t!'
       # Password for root access
-      MYSQL_ROOT_PASSWORD: secr3t!'
+      MYSQL_ROOT_PASSWORD: 'secr3t!'
     ports:
     # <Port exposed> : <MySQL Port running inside container>
     - '3306:3306'
@@ -27,9 +27,11 @@ services:
     image: partyreferencedata:1.0.0
     restart: always
     ports:
-    - "8080:8080"
+    - "8080:8082"
     env_file:
     - .env
+    volumes:
+    - "../api/src/main/resources/application-dev.yaml:/opt/config/application.yaml"
 # Names our volume
 volumes:
   my-db:

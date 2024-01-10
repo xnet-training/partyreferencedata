@@ -61,3 +61,10 @@ java -javaagent:/path/to/opentelemetry-javaagent-all.jar \
      -classpath lib/*:classes/ \
      com.mycompany.checkout.CheckoutServiceServer
 ```
+
+Generar Imagen de Contenedor
+
+```sh
+docker build . -t localhost:5000/partyreferencedata:1.0.0
+docker push localhost:5000/partyreferencedata:1.0.0
+```

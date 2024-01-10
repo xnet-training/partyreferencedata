@@ -15,13 +15,13 @@ servers:
 - url: http://0.0.0.0:8082/customerreferencedata/api/v1
   description: URL del endpoint
 tags:
-- name: Party
+- name: party
   description: Microservicio Customer Reference Data
 paths:
   /party:
     post:
       tags:
-      - Party
+      - party
       summary: Registro de una nueva persona natural o juridica
       description: |
         Esta funcionalidad permite realizar el registro de una nueva persona natural o jurídica.
@@ -54,7 +54,7 @@ paths:
 
     get:
       tags:
-      - Party
+      - party
       summary: Query registered parties
       description: |
         Esta funcionalidad permite realizar el registro de una nueva persona natural o jurídica.
