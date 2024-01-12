@@ -13,7 +13,7 @@ terraform apply --auto-aprove
 
 ```sh
 $ mvn clean install
-$ mvn spring-boot:run -pl customerloan
+$ mvn spring-boot:run -pl api
 ```
 
 Acceder a Documentacion Swagger
