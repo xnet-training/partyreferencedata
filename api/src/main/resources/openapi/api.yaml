@@ -152,8 +152,8 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/PartiesSearchResponse"
-        400:
-          description: Validation error
+        404:
+          description: Not Found
           content:
             application/json:
               schema:
