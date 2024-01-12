@@ -54,35 +54,6 @@ paths:
       security:
         - bearerAuth: []
 
-    put:
-      tags:
-        - party
-      summary: Update party data
-      description: |
-        Esta funcionalidad permite realizar la actualización de los datos de una persona u organización.
-      operationId: updateParty
-      responses:
-        201:
-          description: Successful
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/EntityId"
-        400:
-          description: Validation error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/APIError"
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/APIError"
-      security:
-        - bearerAuth: []
-
     get:
       tags:
         - party
@@ -154,6 +125,42 @@ paths:
                 "$ref": "#/components/schemas/PartiesSearchResponse"
         404:
           description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIError"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIError"
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - party
+      parameters:
+        - name: id
+          in: path
+          description: should be a unique identifier or a list of unique party identifies by comma delimited list.
+          example: "2343567,20537823329"
+          schema:
+            type: string
+          required: true
+      summary: Update party data
+      description: |
+        Esta funcionalidad permite realizar la actualización de los datos de una persona u organización.
+      operationId: updateParty
+      responses:
+        201:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EntityId"
+        400:
+          description: Validation error
           content:
             application/json:
               schema:
@@ -325,7 +332,6 @@ components:
           allOf:
             - "$ref": "#/components/schemas/GeoLocation"
 
-
     GeoLocation:
       type: object
       properties:
@@ -345,4 +351,3 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT

@@ -7,7 +7,10 @@ import com.crossnetcorp.banking.partyreferencedata.presentation.mappers.*;
 import com.crossnetcorp.banking.partyreferencedata.presentation.PartyApiDelegate;
 
 import java.util.Optional;
+import java.util.UUID;
 
+import com.crossnetcorp.banking.partyreferencedata.presentation.views.EntityId;
+import com.crossnetcorp.banking.partyreferencedata.presentation.views.NewPartyReferenceDataRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -33,6 +36,13 @@ public class PartyReferenceDataAPIDelegateImpl implements PartyApiDelegate {
     @Override
     public Optional<NativeWebRequest> getRequest() {
         return PartyApiDelegate.super.getRequest();
+    }
+
+    public ResponseEntity<EntityId> newParty(NewPartyReferenceDataRequest newPartyReferenceDataRequest) {
+        log.info("Registro de Party");
+        EntityId response = new EntityId();
+        response.id(UUID.randomUUID().toString());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /*
