@@ -191,6 +191,51 @@ components:
           type: string
           description: Unique entity identifier
     
+    DocumentNumber:
+      required:
+      - id
+      - number
+      type: object
+      properties:
+        id:
+          type: string
+          description: Document type
+          enum:
+          - DNI
+          - CE
+          - PASSPORT
+          - RUC
+        number:
+          type: string
+          description: |
+            Document number according to document type. Restrictions apply based on: DNI (7 digits), CE (9 digits), RUC(12 digits), PASSPORT (6 or more)
+          example: "000199985"
+          
+    PartyName:
+      required:
+      - function
+      - value
+      type: object
+      properties:
+        id:
+          type: string
+          description: Party name internal reference number (auto generated)
+        
+        function:
+          type: string
+          description: Name function
+          enum:
+          - firstName
+          - otherName
+          - middleName
+          - lastName
+          - commercialName
+          - tradeName
+        name:
+          type: string
+          description: |
+            Document number according to document type. Restrictions apply based on: DNI (7 digits), CE (9 digits), RUC(12 digits), PASSPORT (6 or more)
+
     PartyReferenceData:
       required:
       - firstName
@@ -198,19 +243,34 @@ components:
       - lastName
       type: object
       properties:
-        firstName:
-          type: string
-          description: Party first name
-        middleName:
-          type: string
-          description: Party middle name
-        lastName:
-          type: string
-          description: Party last name
+        fullName:
+          type: array
+          description: Full party name
+          items:
+            "$ref": "#/components/schemas/PartyName"
+#        firstName:
+#          type: string
+#          description: Party first name
+#        middleName:
+#          type: string
+#          description: Party middle name
+#        lastName:
+#          type: string
+#          description: Party last name
         birthDate:
           type: string
           format: date
           description: Birth date (people) o registration date (organization)
+        document:
+          type: array
+          description: Documento identification
+          items:
+            "$ref": "#/components/schemas/DocumentNumber"
+        addresses:
+          type: array
+          description: Address
+          items:
+            "$ref": "#/components/schemas/Location"
 
       
     PartiesSearchResponse:
@@ -231,6 +291,37 @@ components:
           items:
             $ref: "#/components/schemas/PartyReferenceData"
 
+    Location:
+      type: object
+      properties:
+        address:
+          type: string
+          description: Location address
+        number:
+          type: string
+          description: Location number
+        geoLocation:
+          type: object
+          description: Geographical location
+          allOf:
+          - "$ref": "#/components/schemas/GeoLocation"
+          
+
+    GeoLocation:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          description: ISO Country code
+        state:
+          type: string
+          description: Country first level organization
+        district:
+          type: string
+          description: Country second level organization
+        county:
+          type: string
+          description: Country third level organization
   securitySchemes:
     bearerAuth:
       type: http
