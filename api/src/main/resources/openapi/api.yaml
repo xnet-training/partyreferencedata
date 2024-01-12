@@ -15,13 +15,13 @@ servers:
 - url: http://0.0.0.0:8082/customerreferencedata/api/v1
   description: URL del endpoint
 tags:
-- name: Party
+- name: party
   description: Microservicio Customer Reference Data
 paths:
   /party:
     post:
       tags:
-      - Party
+      - party
       summary: Registro de una nueva persona natural o juridica
       description: |
         Esta funcionalidad permite realizar el registro de una nueva persona natural o jurídica.
@@ -38,7 +38,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/APIError"
+                "$ref": "#/components/schemas/EntityId"
         400:
           description: Validation error
           content:
@@ -51,10 +51,41 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/APIError"
+      security:
+      - bearerAuth: []
+      
+    put:
+      tags:
+      - party
+      summary: Update party data
+      description: |
+        Esta funcionalidad permite realizar la actualización de los datos de una persona u organización.
+      operationId: updateParty
+      responses:
+        201:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EntityId"
+        400:
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIError"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIError"
+      security:
+      - bearerAuth: []
 
     get:
       tags:
-      - Party
+      - party
       summary: Query registered parties
       description: |
         Esta funcionalidad permite realizar el registro de una nueva persona natural o jurídica.
@@ -84,7 +115,7 @@ paths:
   /party/{id}:
     get:
       tags:
-      - Party
+      - party
       parameters:
       - name: id
         in: path
@@ -150,7 +181,61 @@ components:
           description: Party detailed data
           allOf: 
           - "$ref": "#/components/schemas/PartyReferenceData"
-            
+    
+    EntityId:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique entity identifier
+    
+    DocumentNumber:
+      required:
+      - id
+      - number
+      type: object
+      properties:
+        id:
+          type: string
+          description: Document type
+          enum:
+          - DNI
+          - CE
+          - PASSPORT
+          - RUC
+        number:
+          type: string
+          description: |
+            Document number according to document type. Restrictions apply based on: DNI (7 digits), CE (9 digits), RUC(12 digits), PASSPORT (6 or more)
+          example: "000199985"
+          
+    PartyName:
+      required:
+      - function
+      - value
+      type: object
+      properties:
+        id:
+          type: string
+          description: Party name internal reference number (auto generated)
+        
+        function:
+          type: string
+          description: Name function
+          enum:
+          - firstName
+          - otherName
+          - middleName
+          - lastName
+          - commercialName
+          - tradeName
+        name:
+          type: string
+          description: |
+            Document number according to document type. Restrictions apply based on: DNI (7 digits), CE (9 digits), RUC(12 digits), PASSPORT (6 or more)
+
     PartyReferenceData:
       required:
       - firstName
@@ -158,19 +243,34 @@ components:
       - lastName
       type: object
       properties:
-        firstName:
-          type: string
-          description: Party first name
-        middleName:
-          type: string
-          description: Party middle name
-        lastName:
-          type: string
-          description: Party last name
+        fullName:
+          type: array
+          description: Full party name
+          items:
+            "$ref": "#/components/schemas/PartyName"
+#        firstName:
+#          type: string
+#          description: Party first name
+#        middleName:
+#          type: string
+#          description: Party middle name
+#        lastName:
+#          type: string
+#          description: Party last name
         birthDate:
           type: string
           format: date
           description: Birth date (people) o registration date (organization)
+        document:
+          type: array
+          description: Documento identification
+          items:
+            "$ref": "#/components/schemas/DocumentNumber"
+        addresses:
+          type: array
+          description: Address
+          items:
+            "$ref": "#/components/schemas/Location"
 
       
     PartiesSearchResponse:
@@ -191,6 +291,37 @@ components:
           items:
             $ref: "#/components/schemas/PartyReferenceData"
 
+    Location:
+      type: object
+      properties:
+        address:
+          type: string
+          description: Location address
+        number:
+          type: string
+          description: Location number
+        geoLocation:
+          type: object
+          description: Geographical location
+          allOf:
+          - "$ref": "#/components/schemas/GeoLocation"
+          
+
+    GeoLocation:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          description: ISO Country code
+        state:
+          type: string
+          description: Country first level organization
+        district:
+          type: string
+          description: Country second level organization
+        county:
+          type: string
+          description: Country third level organization
   securitySchemes:
     bearerAuth:
       type: http
