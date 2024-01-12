@@ -38,7 +38,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/APIError"
+                "$ref": "#/components/schemas/EntityId"
         400:
           description: Validation error
           content:
@@ -51,6 +51,37 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/APIError"
+      security:
+      - bearerAuth: []
+      
+    put:
+      tags:
+      - party
+      summary: Update party data
+      description: |
+        Esta funcionalidad permite realizar la actualización de los datos de una persona u organización.
+      operationId: updateParty
+      responses:
+        201:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EntityId"
+        400:
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIError"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIError"
+      security:
+      - bearerAuth: []
 
     get:
       tags:
@@ -150,7 +181,16 @@ components:
           description: Party detailed data
           allOf: 
           - "$ref": "#/components/schemas/PartyReferenceData"
-            
+    
+    EntityId:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique entity identifier
+    
     PartyReferenceData:
       required:
       - firstName
