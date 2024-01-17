@@ -11,6 +11,12 @@ terraform init
 terraform apply --auto-aprove
 ```
 
+# Acceso a BD
+
+```sql
+GRANT ALL PRIVILEGES ON *.* TO 'microservicio'@'%' IDENTIFIED BY 'secr3t!';
+```
+
 ```sh
 $ mvn clean install
 $ mvn spring-boot:run -pl api

@@ -1,11 +1,14 @@
 package com.crossnetcorp.banking.partyreferencedata.presentation;
 
+import com.crossnetcorp.banking.partyreferencedata.application.ApplicationException;
 import com.crossnetcorp.banking.partyreferencedata.infrastructure.ValidationException;
 import com.crossnetcorp.banking.partyreferencedata.presentation.views.APIError;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.validation.ConstraintViolationException;
+import javax.ws.rs.core.Application;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,4 +139,23 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ApplicationException.class)
+    protected ResponseEntity<Object> handleApplicationException(ApplicationException ex) {
+
+        APIError response = new APIError();
+
+        response.setCode(ex.getCode());
+        response.setMessage(ex.getMessage());
+        response.setLocation(ex.getCause() != null ? ex.getCause().getMessage() : null);
+
+        /*Stream<APIError> errors = ex.getErrors().stream().map(e -> {
+            APIError error = new APIError();
+            error.setMessage( e.getDefaultMessage());
+            return error;
+        });*/
+
+        // response.setErrors(errors.collect(Collectors.toList()));
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }

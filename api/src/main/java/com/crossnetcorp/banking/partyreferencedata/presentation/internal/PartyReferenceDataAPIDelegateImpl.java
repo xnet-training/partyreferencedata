@@ -2,13 +2,15 @@ package com.crossnetcorp.banking.partyreferencedata.presentation.internal;
 
 import com.crossnetcorp.banking.partyreferencedata.application.ApplicationPartyReferenceDataService;
 import com.crossnetcorp.banking.partyreferencedata.application.ApplicationException;
-import com.crossnetcorp.banking.partyreferencedata.application.model.PartyReferenceDataDTO;
+import com.crossnetcorp.banking.partyreferencedata.presentation.ValidationUtils;
 import com.crossnetcorp.banking.partyreferencedata.presentation.mappers.*;
 import com.crossnetcorp.banking.partyreferencedata.presentation.PartyApiDelegate;
 
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.crossnetcorp.banking.partyreferencedata.presentation.views.APIError;
 import com.crossnetcorp.banking.partyreferencedata.presentation.views.EntityId;
 import com.crossnetcorp.banking.partyreferencedata.presentation.views.NewPartyReferenceDataRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -38,11 +40,27 @@ public class PartyReferenceDataAPIDelegateImpl implements PartyApiDelegate {
         return PartyApiDelegate.super.getRequest();
     }
 
-    public ResponseEntity<EntityId> newParty(NewPartyReferenceDataRequest newPartyReferenceDataRequest) {
-        log.info("Registro de Party");
-        EntityId response = new EntityId();
-        response.id(UUID.randomUUID().toString());
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<EntityId> newParty(NewPartyReferenceDataRequest request) throws Exception {
+            // throws ApplicationException {
+        // try {
+            log.info("Registro de Party");
+            // Validar datos
+            ValidationUtils.menorEdad(request.getParty().getBirthDate());
+            // service.registerPartyReferenceData(mapper.toDTO(request));
+            EntityId response = new EntityId();
+            response.id(UUID.randomUUID().toString());
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        /*} catch (ApplicationException ae) {
+            log.error(ae.getMessage());
+            return new ResponseEntity<>(newError(ae.getCode(), ae.getMessage()), HttpStatus.BAD_REQUEST);
+        }*/
+    }
+
+    private APIError newError(Integer code, String message) {
+        APIError error = new APIError();
+        error.setCode(code);
+        error.setMessage(message);
+        return error;
     }
 
     /*

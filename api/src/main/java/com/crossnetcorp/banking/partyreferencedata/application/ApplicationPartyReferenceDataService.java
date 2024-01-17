@@ -20,5 +20,5 @@ public interface ApplicationPartyReferenceDataService {
 
         PartyReferenceDataDTO getPartyReferenceData(String id) throws ApplicationException;
 
-        PartyReferenceDataDTO registerPartyReferenceData(String id)  throws ApplicationException;
+        PartyReferenceDataDTO registerPartyReferenceData(PartyReferenceDataDTO dto)  throws ApplicationException;
 }

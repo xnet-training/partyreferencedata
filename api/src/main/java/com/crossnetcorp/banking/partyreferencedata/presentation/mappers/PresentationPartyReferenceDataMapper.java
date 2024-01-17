@@ -4,6 +4,8 @@ import com.crossnetcorp.banking.partyreferencedata.application.model.PartyRefere
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.crossnetcorp.banking.partyreferencedata.presentation.views.NewPartyReferenceDataRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -14,6 +16,10 @@ import org.mapstruct.Mappings;
  */
 @Mapper(componentModel = "spring")
 public interface PresentationPartyReferenceDataMapper {
+    /*@Mappings({
+            @Mapping(target = "", source = "")
+    })*/
+    PartyReferenceDataDTO toDTO(NewPartyReferenceDataRequest request);
 
     // PartyReferenceDataDTO toDTO(PrestamoConsumoPignoraticioRequest obj);
 

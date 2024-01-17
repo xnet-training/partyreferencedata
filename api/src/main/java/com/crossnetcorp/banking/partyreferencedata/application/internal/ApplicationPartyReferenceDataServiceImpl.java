@@ -33,7 +33,7 @@ public class ApplicationPartyReferenceDataServiceImpl implements ApplicationPart
     private ApplicationPartyReferenceDataMapper mapper;
 
     @Override
-    public PartyReferenceDataDTO registerPartyReferenceData(String id) throws ApplicationException {
+    public PartyReferenceDataDTO registerPartyReferenceData(PartyReferenceDataDTO dto) throws ApplicationException {
         try {
             PartyReferenceData result = service.registerPartyReferenceData(
                 PartyReferenceData.builder()
@@ -43,7 +43,7 @@ public class ApplicationPartyReferenceDataServiceImpl implements ApplicationPart
             return mapper.fromDomain(result);
         } catch(Exception e) {
             log.error("OCURRIO UN ERROR EN REQUEST REGISTRO: {}", e.getMessage());
-            throw new ApplicationException(e.getMessage());
+            throw new ApplicationException(1001, e.getMessage());
         }
     }
 
