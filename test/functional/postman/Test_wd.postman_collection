@@ -1,0 +1,149 @@
+{
+	"info": {
+		"_postman_id": "bcb09f4a-0e99-4e70-8c94-9f37c55d04ff",
+		"name": "Party Reference Data",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23157412"
+	},
+	"item": [
+		{
+			"name": "Party",
+			"item": [
+				{
+					"name": "FUN1 Registro de Clientes",
+					"item": [
+						{
+							"name": "CP1.1 Registro de Persona Nueva",
+							"item": [
+								{
+									"name": "Ejecutar Funcionalidad",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status test\", function () {\r",
+													"    pm.response.to.have.status(201);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"party\": {\r\n    \"fullName\": [\r\n      {\r\n        \"function\": \"firstName\",\r\n        \"name\": \"{{firstName}}\"\r\n      },\r\n      {\r\n        \"function\": \"middleName\",\r\n        \"name\": \"{{middleName}}\"\r\n      },\r\n      {\r\n        \"function\": \"lastName\",\r\n        \"name\": \"{{lastName}}\"\r\n      }\r\n    ],\r\n    \"birthDate\": \"{{birthDate}}\",\r\n    \"document\": [\r\n      {\r\n        \"id\": \"{{docType1}}\",\r\n        \"number\": \"{{docNumber1}}\"\r\n      }\r\n    ],\r\n    \"addresses\": [\r\n      {\r\n        \"address\": \"{{address}}\",\r\n        \"number\": \"{{addressNumber}}\",\r\n        \"geoLocation\": {\r\n          \"countryCode\": \"PE\",\r\n          \"state\": \"LIMA\",\r\n          \"district\": \"LIMA\",\r\n          \"county\": \"SAN BORJA\"\r\n        }\r\n      }\r\n    ]\r\n  }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{URL_MICROSERVICIO}}/customerreferencedata/api/v1/party",
+											"host": [
+												"{{URL_MICROSERVICIO}}"
+											],
+											"path": [
+												"customerreferencedata",
+												"api",
+												"v1",
+												"party"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "CP1.3 Registro de persona menor de edad",
+							"item": [
+								{
+									"name": "Ejecutar Funcionalidad MenorEdad",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status test\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"\r",
+													"// Codigo de Error por Menor de Edad = 1000\r",
+													"pm.test(\"Persona Menor de Edad\", function () {\r",
+													"    pm.expect(pm.response.json().code).to.equal(1000);\r",
+													"    //pm.response(pm.response.json().code).equal(\"1000\");\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"party\": {\r\n    \"fullName\": [\r\n      {\r\n        \"function\": \"firstName\",\r\n        \"name\": \"{{firstName}}\"\r\n      },\r\n      {\r\n        \"function\": \"middleName\",\r\n        \"name\": \"{{middleName}}\"\r\n      },\r\n      {\r\n        \"function\": \"lastName\",\r\n        \"name\": \"{{lastName}}\"\r\n      }\r\n    ],\r\n    \"birthDate\": \"{{birthDate}}\",\r\n    \"document\": [\r\n      {\r\n        \"id\": \"{{docType1}}\",\r\n        \"number\": \"{{docNumber1}}\"\r\n      }\r\n    ],\r\n    \"addresses\": [\r\n      {\r\n        \"address\": \"{{address}}\",\r\n        \"number\": \"{{addressNumber}}\",\r\n        \"geoLocation\": {\r\n          \"countryCode\": \"PE\",\r\n          \"state\": \"LIMA\",\r\n          \"district\": \"LIMA\",\r\n          \"county\": \"SAN BORJA\"\r\n        }\r\n      }\r\n    ]\r\n  }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{URL_MICROSERVICIO}}/customerreferencedata/api/v1/party",
+											"host": [
+												"{{URL_MICROSERVICIO}}"
+											],
+											"path": [
+												"customerreferencedata",
+												"api",
+												"v1",
+												"party"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL_MICROSERVICIO",
+			"value": "http://api.crossnetcorp.com:8080",
+			"type": "string"
+		}
+	]
+}

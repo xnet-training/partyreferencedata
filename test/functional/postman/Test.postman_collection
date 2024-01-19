@@ -10,10 +10,10 @@
 			"name": "Party",
 			"item": [
 				{
-					"name": "FUN1 Registro de Clientes",
+					"name": "FUN1_Registro_de_Clientes",
 					"item": [
 						{
-							"name": "CP1.1 Registro de Persona Nueva",
+							"name": "CP1.1_Registro_de_Persona_Nueva",
 							"item": [
 								{
 									"name": "Ejecutar Funcionalidad",

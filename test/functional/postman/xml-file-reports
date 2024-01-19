@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Party Reference Data v1.0" tests="3" time="0.974">
+  <testsuite name="Party / FUN1 Registro de Clientes / CP1.1 Registro de Persona Nueva / Ejecutar Funcionalidad cp11" id="31ba5465-7954-4008-a4c8-41e98b44807c" timestamp="2024-01-19T04:17:28.478Z" tests="0" failures="0" errors="0" time="0.728"/>
+  <testsuite name="Party / FUN1 Registro de Clientes / CP1.2 Registro de Persona con Doc Existente / Ejecutar Funcionalidad CP12" id="e46ebed1-3064-4724-bcd0-cae60c15349f" timestamp="2024-01-19T04:17:28.478Z" tests="0" failures="0" errors="0" time="0.126"/>
+  <testsuite name="Party / FUN1 Registro de Clientes / CP1.3 Registro de persona menor de edad / Ejecutar Funcionalidad CP13" id="f973e648-fa08-4326-b8b2-e85f2536ce01" timestamp="2024-01-19T04:17:28.478Z" tests="0" failures="0" errors="0" time="0.120"/>
+</testsuites>

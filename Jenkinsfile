@@ -18,32 +18,32 @@ pipeline {
             userRemoteConfigs: [[credentialsId: 'ianache', url: 'https://github.com/xnet-training/partyreferencedata.git']]])
       }
     }
-    //stage('Construir Imagen de Contenedor') {
-    //  steps {
-    //      //script {
-    //      //  customImage = docker.build("xnet/partyreferencedata:1.0.2")
-    //      //  customImage.push()
-    //      //}
-    //      script {
-    //        sh 'docker build . -t partyreferencedata:1.0.2'
-    //      }
-    //  }
-    //}
+    stage('Construir Imagen de Contenedor') {
+      steps {
+          //script {
+          //  customImage = docker.build("xnet/partyreferencedata:1.0.2")
+          //  customImage.push()
+          //}
+          script {
+            sh 'echo "docker build . -t partyreferencedata:1.0.2"'
+            // sh 'docker build . -t partyreferencedata:1.0.2'
+          }
+      }
+    }
     stage('Desplegar microservicio') {
       steps {
         script {
-          sh 'echo "Desplegando Microservicio"'
-          // sh 'cd dev-environment && docker-compose -f docker-compose.yaml up -d'
+          // sh 'echo "Desplegando Microservicio"'
+          sh 'echo "cd dev-environment && docker-compose -f docker-compose.yaml up -d"'
         }
       }
     }
     stage('Ejecutar Suite de Pruebas Funcionales') {
-      agent { docker { image 'postman/newman:alpine' } }
+      //agent { docker { image 'postman/newman:alpine' } }
       steps {
         script {
           sh '''
-             echo "Probando el microservicio"
-             cd test/functional/postman && newman run Test.postman_collection -d CP1.1_Datapool.csv
+             echo "cd test/functional/postman && newman run Test.postman_collection -d CP1.1_Datapool.csv"
           '''            
         }
       }
