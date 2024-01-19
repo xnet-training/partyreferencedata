@@ -24,7 +24,7 @@ pipeline {
           //  customImage = docker.build("xnet/partyreferencedata:1.0.2")
           //  customImage.push()
           //}
-          sh 'docker build . -t partyreferencedata:1.0.2'
+          // sh 'docker build . -t partyreferencedata:1.0.2'
       }
     }
   }
