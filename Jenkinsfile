@@ -3,8 +3,10 @@ pipeline {
 
   stages {
     stage('Check-Out') {
-      script {
-        sh 'git clone https://github.com/xnet-training/partyreferencedata.git'
+      steps {
+        script {
+          sh 'git clone https://github.com/xnet-training/partyreferencedata.git'
+        }
       }
     }
     stage('Construir Imagen de Contenedor') {
