@@ -21,7 +21,7 @@ pipeline {
     stage('Construir Imagen de Contenedor') {
       steps {
           script {
-            customImage = docker.build("xnet/partyreferencedata:1.0.2")
+            //customImage = docker.build("xnet/partyreferencedata:1.0.2")
             //customImage.push()
           }
           //script {
@@ -34,7 +34,7 @@ pipeline {
       steps {
         script {
           sh '''
-             echo "Desplegando Microservicio"'
+             echo "Desplegando Microservicio"
              sshpass -p "vagrant" scp docker-compose.yaml vagrant@172.17.8.28/opt/devops/partyreferencedata
              cd dev-environment && docker compose -f docker-compose.yaml up -d
           '''

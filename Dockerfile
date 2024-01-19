@@ -5,7 +5,7 @@ LABEL version=0.1.0
 
 COPY . /usr/src/app
 
-RUN mvn --batch-mode -f /usr/src/app/pom.xml -s /usr/src/app/ci_settings.xml clean package && \
+RUN --mount=type=cache,target=/root/.m2 mvn --batch-mode -f /usr/src/app/pom.xml -s /usr/src/app/ci_settings.xml clean package && \
     test $(find ./ -type f -name '*-api.jar' | wc -l) -eq 1
 
 FROM amazoncorretto:17
