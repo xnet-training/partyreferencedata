@@ -4,7 +4,10 @@ pipeline {
   stages {
     stage('Construir Imagen de Contenedor') {
       steps {
-        sh 'echo "Generando Imagen"'
+        script {
+          sh 'echo "Generando Imagen"'
+          docker build . -t partyreferencedata:1.0.2
+        }
       }
     }
   }
