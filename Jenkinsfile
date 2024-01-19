@@ -32,7 +32,8 @@ pipeline {
     stage('Desplegar microservicio') {
       steps {
         script {
-          sh 'cd dev-environment && docker-compose -f docker-compose.yaml up -d'
+          sh 'echo "Desplegando Microservicio"'
+          // sh 'cd dev-environment && docker-compose -f docker-compose.yaml up -d'
         }
       }
     }
@@ -40,7 +41,10 @@ pipeline {
       agent { docker { image 'postman/newman:alpine' } }
       steps {
         script {
-          sh 'Probando el microservicio'
+          sh '''
+             echo "Probando el microservicio"
+             cd test/functional/postman && newman run Test.postman_collection -d CP1.1_Datapool.csv
+          '''            
         }
       }
     }
