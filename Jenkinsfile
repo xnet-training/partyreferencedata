@@ -39,11 +39,17 @@ pipeline {
       }
     }
     stage('Ejecutar Suite de Pruebas Funcionales') {
-      //agent { docker { image 'postman/newman:alpine' } }
+      agent { 
+        docker { 
+          image 'postman/newman:alpine'
+          entrypoint 'bash'
+        } 
+      }
       steps {
         script {
           sh '''
-             echo "cd test/functional/postman && newman run Test.postman_collection -d CP1.1_Datapool.csv"
+             cd test/functional/postman
+             newman run Test_wd.postman_collection --folder='CP1.3 Registro de persona menor de edad' --iteration-data CP1.3_Datapool.csv --folder='CP1.1 Registro de Persona Nueva' --iteration-data CP1.1_Datapool.csv --verbose
           '''            
         }
       }
