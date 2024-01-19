@@ -41,8 +41,7 @@ pipeline {
     stage('Ejecutar Suite de Pruebas Funcionales') {
       agent { 
         docker { 
-          image 'postman/newman:alpine'
-          entrypoint 'bash'
+          image 'xnet/postman_newman:alpine-1.0.0'
         } 
       }
       steps {
