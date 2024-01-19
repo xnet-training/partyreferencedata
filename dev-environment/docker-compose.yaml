@@ -24,7 +24,7 @@ services:
     volumes:
     - my-db:/var/lib/mysql
   service:
-    image: partyreferencedata:1.0.0
+    image: partyreferencedata:1.0.2
     restart: always
     ports:
     - "8080:8082"
