@@ -51,7 +51,14 @@ pipeline {
           '''            
         }
       }
-      post {  }
+      post {
+        success {
+           echo "Send Ok"
+        }
+        error {
+           echo "Send Alert"
+        }
+      }
     }
   }
 }
