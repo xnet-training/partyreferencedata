@@ -3,6 +3,13 @@ pipeline {
   //agent { docker { image 'maven:3.8.5-jdk-11' } }
 
   stages {
+    def remote = [:]
+    remote.name = 'docker-compose.yaml'
+    remote.host = '172.17.8.28'
+    remote.user = 'vagrant'
+    remote.password = 'vagrant'
+    remote.allowAnyHosts = true
+
     stage('Check-Out') {
       steps {
         //script {
@@ -33,9 +40,7 @@ pipeline {
     stage('Desplegar microservicio') {
       steps {
         script {
-          sshPut remote: [name: 'docker-compose.yaml', host: '172.17.8.28', user: 'vagrant', password: 'vagrant', allowAnyHosts: true ], 
-                 from: './dev-environment/docker-compose.yaml',
-                 to: '/opt/devops/partyreferencedata/'
+          sshPut remote: remote, from: './dev-environment/docker-compose.yaml', into: '/opt/devops/partyreferencedata/'
           //sh '''
           //   echo "Desplegando Microservicio"
              
