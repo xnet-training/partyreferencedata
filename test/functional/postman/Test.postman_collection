@@ -1,163 +1,94 @@
 {
 	"info": {
-		"_postman_id": "2d00b68f-276d-4cfa-b852-f4226bff408a",
-		"name": "partyreferencedata",
+		"_postman_id": "895e2115-a397-4c5b-8550-7aa2dcb4fdc3",
+		"name": "Party Reference Data",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "4516199"
 	},
 	"item": [
 		{
-			"name": "CP01 Obtener Token JWT",
-			"event": [
+			"name": "Party",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"let response = pm.response.json(),\r",
-							"token = response.access_token\r",
-							"savedData = JSON.stringify(response);\r",
-							"pm.collectionVariables.set(\"savedData\", savedData);\r",
-							"pm.collectionVariables.set(\"jwtToken\", token);"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/x-www-form-urlencoded",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
+					"name": "FUN1 Registro de Clientes",
+					"item": [
 						{
-							"key": "username",
-							"value": "partyreferencedata",
-							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "welcome1",
-							"type": "text"
-						},
-						{
-							"key": "grant_type",
-							"value": "password",
-							"type": "text"
-						},
-						{
-							"key": "client_id",
-							"value": "SD Party Reference Data",
-							"type": "text"
-						},
-						{
-							"key": "client_secret",
-							"value": "c0729701-818f-434c-93a9-1ff30939baf0",
-							"type": "text"
+							"name": "CP1.1 Registro de Persona Nueva",
+							"item": [
+								{
+									"name": "Ejecutar Funcionalidad",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status test\", function () {\r",
+													"    pm.response.to.have.status(201);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"party\": {\r\n    \"fullName\": [\r\n      {\r\n        \"function\": \"firstName\",\r\n        \"name\": \"{{firstName}}\"\r\n      },\r\n      {\r\n        \"function\": \"middleName\",\r\n        \"name\": \"{{middleName}}\"\r\n      },\r\n      {\r\n        \"function\": \"lastName\",\r\n        \"name\": \"{{lastName}}\"\r\n      }\r\n    ],\r\n    \"birthDate\": \"{{birthDate}}\",\r\n    \"document\": [\r\n      {\r\n        \"id\": \"{{docType1}}\",\r\n        \"number\": \"{{docNumber1}}\"\r\n      }\r\n    ],\r\n    \"addresses\": [\r\n      {\r\n        \"address\": \"{{address}}\",\r\n        \"number\": \"{{addressNumber}}\",\r\n        \"geoLocation\": {\r\n          \"countryCode\": \"PE\",\r\n          \"state\": \"LIMA\",\r\n          \"district\": \"LIMA\",\r\n          \"county\": \"SAN BORJA\"\r\n        }\r\n      }\r\n    ]\r\n  }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{URL_MICROSERVICIO}}/customerreferencedata/api/v1/party",
+											"host": [
+												"{{URL_MICROSERVICIO}}"
+											],
+											"path": [
+												"customerreferencedata",
+												"api",
+												"v1",
+												"party"
+											]
+										}
+									},
+									"response": []
+								}
+							]
 						}
 					]
-				},
-				"url": {
-					"raw": "https://oauth2.crossnetcorp.com/auth/realms/microservicios/protocol/openid-connect/token",
-					"protocol": "https",
-					"host": [
-						"oauth2oauth2",
-						"crossnetcorp",
-						"com"
-					],
-					"path": [
-						"auth",
-						"realms",
-						"microservicios",
-						"protocol",
-						"openid-connect",
-						"token"
-					]
 				}
-			},
-			"response": []
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		},
 		{
-			"name": "CP02 Caso de Pruebas X - Escenario Y",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"CP01 - Test Case exitoso 1\", function() {\r",
-							"    pm.response.to.have.status(200)\r",
-							"})\r",
-							"\r",
-							"pm.test(\"CP02 - Test Case Exitoso 2\", function() {   \r",
-							"    const length = pm.response.json().resultado.length;\r",
-							"    pm.expect(length).to.be.greaterThan(0);\r",
-							"})"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{jwtToken}}",
-						"type": "text"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": []
-				},
-				"url": {
-					"raw": "https://{{API_BASE}}/partyreferencedata/api/v1/SD Party Reference Data?offset=0&limit=30",
-					"protocol": "https",
-					"host": [
-						"{{API_BASE}}"
-					],
-					"path": [
-						"partyreferencedata",
-						"api",
-						"v1",
-						"SD Party Reference Data"
-					],
-					"query": [
-						{
-							"key": "offset",
-							"value": "0"
-						},
-						{
-							"key": "limit",
-							"value": "30"
-						}
-					]
-				}
-			},
-			"response": []
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"variable": [
 		{
-			"key": "savedData",
-			"value": ""
-		},
-		{
-			"key": "jwtToken",
-			"value": ""
+			"key": "URL_MICROSERVICIO",
+			"value": "http://api.crossnetcorp.com:8080",
+			"type": "string"
 		}
 	]
 }

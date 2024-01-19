@@ -1,0 +1,196 @@
+{
+	"info": {
+		"_postman_id": "76323ec4-f04d-4618-8cca-7f0366a85c23",
+		"name": "Party Reference Data v1.0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23157412"
+	},
+	"item": [
+		{
+			"name": "Party",
+			"item": [
+				{
+					"name": "FUN1 Registro de Clientes",
+					"item": [
+						{
+							"name": "CP1.1 Registro de Persona Nueva",
+							"item": [
+								{
+									"name": "Ejecutar Funcionalidad cp11",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"party\": {\r\n    \"fullName\": [\r\n      {\r\n        \"function\": \"firstName\",\r\n        \"name\": \"ILVER\"\r\n      },\r\n      {\r\n        \"function\": \"middleName\",\r\n        \"name\": \"ANACHE\"\r\n      },\r\n      {\r\n        \"function\": \"lastName\",\r\n        \"name\": \"PUPO\"\r\n      }\r\n    ],\r\n    \"birthDate\": \"1972-07-02\",\r\n    \"document\": [\r\n      {\r\n        \"id\": \"CE\",\r\n        \"number\": \"000199985\"\r\n      }\r\n    ],\r\n    \"addresses\": [\r\n      {\r\n        \"address\": \"VIVALDI 147\",\r\n        \"number\": \"301\",\r\n        \"geoLocation\": {\r\n          \"countryCode\": \"PE\",\r\n          \"state\": \"LIMA\",\r\n          \"district\": \"LIMA\",\r\n          \"county\": \"SAN BORJA\"\r\n        }\r\n      }\r\n    ]\r\n  }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{URL_MICROSERVICIO}}/customerreferencedata/api/v1/party",
+											"host": [
+												"{{URL_MICROSERVICIO}}"
+											],
+											"path": [
+												"customerreferencedata",
+												"api",
+												"v1",
+												"party"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "CP1.2 Registro de Persona con Doc Existente",
+							"item": [
+								{
+									"name": "Ejecutar Funcionalidad CP12",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"party\": {\r\n    \"fullName\": [\r\n      {\r\n        \"function\": \"firstName\",\r\n        \"name\": \"ILVER\"\r\n      },\r\n      {\r\n        \"function\": \"middleName\",\r\n        \"name\": \"ANACHE\"\r\n      },\r\n      {\r\n        \"function\": \"lastName\",\r\n        \"name\": \"PUPO\"\r\n      }\r\n    ],\r\n    \"birthDate\": \"1972-07-02\",\r\n    \"document\": [\r\n      {\r\n        \"id\": \"CE\",\r\n        \"number\": \"000199985\"\r\n      }\r\n    ],\r\n    \"addresses\": [\r\n      {\r\n        \"address\": \"VIVALDI 147\",\r\n        \"number\": \"301\",\r\n        \"geoLocation\": {\r\n          \"countryCode\": \"PE\",\r\n          \"state\": \"LIMA\",\r\n          \"district\": \"LIMA\",\r\n          \"county\": \"SAN BORJA\"\r\n        }\r\n      }\r\n    ]\r\n  }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{URL_MICROSERVICIO}}/customerreferencedata/api/v1/party",
+											"host": [
+												"{{URL_MICROSERVICIO}}"
+											],
+											"path": [
+												"customerreferencedata",
+												"api",
+												"v1",
+												"party"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "CP1.3 Registro de persona menor de edad",
+							"item": [
+								{
+									"name": "Ejecutar Funcionalidad CP13",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"party\": {\r\n    \"fullName\": [\r\n      {\r\n        \"function\": \"firstName\",\r\n        \"name\": \"ILVER\"\r\n      },\r\n      {\r\n        \"function\": \"middleName\",\r\n        \"name\": \"ANACHE\"\r\n      },\r\n      {\r\n        \"function\": \"lastName\",\r\n        \"name\": \"PUPO\"\r\n      }\r\n    ],\r\n    \"birthDate\": \"1972-07-02\",\r\n    \"document\": [\r\n      {\r\n        \"id\": \"CE\",\r\n        \"number\": \"000199985\"\r\n      }\r\n    ],\r\n    \"addresses\": [\r\n      {\r\n        \"address\": \"VIVALDI 147\",\r\n        \"number\": \"301\",\r\n        \"geoLocation\": {\r\n          \"countryCode\": \"PE\",\r\n          \"state\": \"LIMA\",\r\n          \"district\": \"LIMA\",\r\n          \"county\": \"SAN BORJA\"\r\n        }\r\n      }\r\n    ]\r\n  }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{URL_MICROSERVICIO}}/customerreferencedata/api/v1/party",
+											"host": [
+												"{{URL_MICROSERVICIO}}"
+											],
+											"path": [
+												"customerreferencedata",
+												"api",
+												"v1",
+												"party"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "FUN2 Consultas de Clientes",
+					"item": [
+						{
+							"name": "CP2.1 Consulta de clientes existentes por Tipo de Documento",
+							"item": []
+						}
+					]
+				},
+				{
+					"name": "FUN3 Obtener Cliente",
+					"item": [
+						{
+							"name": "CP3.1 Obtener Cliente Existente",
+							"item": []
+						},
+						{
+							"name": "CP3.2 Obtener Cliente Inexistente",
+							"item": []
+						}
+					]
+				},
+				{
+					"name": "FUN4 Actualizar Datos de Clientes",
+					"item": [
+						{
+							"name": "CP4.1 Actualizar datos de cliente existente",
+							"item": []
+						},
+						{
+							"name": "CP4.2 Actualizar datos de cliente con Nro Invalido",
+							"item": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL_MICROSERVICIO",
+			"value": "http://api.crossnetcorp.com:8080",
+			"type": "string"
+		}
+	]
+}
+

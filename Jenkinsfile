@@ -18,15 +18,30 @@ pipeline {
             userRemoteConfigs: [[credentialsId: 'ianache', url: 'https://github.com/xnet-training/partyreferencedata.git']]])
       }
     }
-    stage('Construir Imagen de Contenedor') {
+    //stage('Construir Imagen de Contenedor') {
+    //  steps {
+    //      //script {
+    //      //  customImage = docker.build("xnet/partyreferencedata:1.0.2")
+    //      //  customImage.push()
+    //      //}
+    //      script {
+    //        sh 'docker build . -t partyreferencedata:1.0.2'
+    //      }
+    //  }
+    //}
+    stage('Desplegar microservicio') {
       steps {
-          //script {
-          //  customImage = docker.build("xnet/partyreferencedata:1.0.2")
-          //  customImage.push()
-          //}
-          script {
-            sh 'docker build . -t partyreferencedata:1.0.2'
-          }
+        script {
+          sh 'cd dev-environment && docker-compose -f docker-compose.yaml up -d'
+        }
+      }
+    }
+    stage('Ejecutar Suite de Pruebas Funcionales') {
+      agent { docker { image 'postman/newman:alpine' } }
+      steps {
+        script {
+          sh 'Probando el microservicio'
+        }
       }
     }
   }
