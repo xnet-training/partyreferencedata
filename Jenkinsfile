@@ -40,14 +40,14 @@ pipeline {
     stage('Desplegar microservicio') {
       steps {
         script {
-          /// sh echo sshPut remote: remote, from: './dev-environment/docker-compose.yaml', into: '/opt/devops/partyreferencedata/'
+          // sh echo sshPut remote: remote, from: './dev-environment/docker-compose.yaml', into: '/opt/devops/partyreferencedata/'
           sh '''
              echo "Desplegando Microservicio"
-             
+          '''   
           //   sshpass -p vagrant scp ./dev-environment/docker-compose.yaml vagrant@172.17.8.28:/opt/devops/partyreferencedata/
           //   sshpass -p vagrant scp ./dev-environment/.env vagrant@172.17.8.28:/opt/devops/partyreferencedata/
           //   sshpass -p vagrant ssh vagrant@172.17.8.28 sh 'cd /opt/devops/partyreferencedata && docker compose -f docker-compose.yaml up -d'
-          '''
+          
         }
       }
     }
