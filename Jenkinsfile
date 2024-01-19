@@ -34,16 +34,12 @@ pipeline {
       steps {
         script {
           // sh 'echo "Desplegando Microservicio"'
-          sh 'echo "cd dev-environment && docker-compose -f docker-compose.yaml up -d"'
+          sh 'cd dev-environment && docker compose -f docker-compose.yaml up -d'
         }
       }
     }
     stage('Ejecutar Suite de Pruebas Funcionales') {
-      agent { 
-        docker { 
-          image 'xnet/postman_newman:alpine-1.0.0'
-        } 
-      }
+      agent { docker { image 'xnet/postman_newman:alpine-1.0.0' }}
       steps {
         script {
           sh '''
