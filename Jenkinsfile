@@ -1,6 +1,6 @@
 pipeline {
-  //agent any
-  agent { docker { image 'maven:3.8.5-jdk-11' } }
+  agent any
+  //agent { docker { image 'maven:3.8.5-jdk-11' } }
 
   stages {
     stage('Check-Out') {
@@ -24,7 +24,9 @@ pipeline {
           //  customImage = docker.build("xnet/partyreferencedata:1.0.2")
           //  customImage.push()
           //}
-          // sh 'docker build . -t partyreferencedata:1.0.2'
+          script {
+            sh 'docker build . -t partyreferencedata:1.0.2'
+          }
       }
     }
   }
