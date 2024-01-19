@@ -48,14 +48,14 @@ pipeline {
           sh '''
              cd test/functional/postman
              newman run Test_wd.postman_collection --folder='CP1.3 Registro de persona menor de edad' --iteration-data CP1.3_Datapool.csv --folder='CP1.1 Registro de Persona Nueva' --iteration-data CP1.1_Datapool.csv --verbose
-          '''            
+          '''
         }
       }
       post {
         success {
            echo "Send Ok"
         }
-        error {
+        failure  {
            echo "Send Alert"
         }
       }
