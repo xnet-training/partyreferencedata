@@ -20,10 +20,9 @@ pipeline {
     stage('Construir Imagen de Contenedor') {
       steps {
           script {
-            customImage = docker.build("partyreferencedata:1.0.2")
+            customImage = docker.build("xnet/partyreferencedata:1.0.2")
             customImage.push()
           }
-        }
       }
     }
   }
