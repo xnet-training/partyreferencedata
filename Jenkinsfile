@@ -36,8 +36,8 @@ pipeline {
           sh '''
              echo "Desplegando Microservicio"
              cd dev-environment
-             sshpass -p "vagrant" scp docker-compose.yaml vagrant@172.17.8.28:/opt/devops/partyreferencedata
-             sshpass -p "vagrant" scp .env vagrant@172.17.8.28:/opt/devops/partyreferencedata
+             sshpass -p vagrant scp docker-compose.yaml vagrant@172.17.8.28:/opt/devops/partyreferencedata/
+             sshpass -p vagrant scp .env vagrant@172.17.8.28:/opt/devops/partyreferencedata/
              sshpass -p "vagrant" ssh vagrant@172.17.8.28 -c 'cd /opt/devops/partyreferencedata && docker compose -f docker-compose.yaml up -d'
           '''
         }
