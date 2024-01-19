@@ -10,15 +10,17 @@ pipeline {
       }
     }
     stage('Construir Imagen de Contenedor') {
-      container('kaniko') {
-        script {
-          sh '''
+      steps {
+        container('kaniko') {
+          script {
+            sh '''
             /kaniko/executor --dockerfile `pwd`/Dockerfile \
               --context `pwd` \
               --destination=xnet/partyreferencedata:${BUILD_NUMBER}
-          '''
+            '''
+          }
         }
-      } 
+      }
     }
   }
 }
