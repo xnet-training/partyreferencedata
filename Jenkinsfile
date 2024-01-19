@@ -23,8 +23,8 @@ pipeline {
           script {
             //customImage = docker.build("xnet/partyreferencedata:1.0.2")
             //customImage.push()
-          }
-          script {
+          
+          
             sh 'echo "docker build . -t partyreferencedata:1.0.2"'
           //  // sh 'docker build . -t partyreferencedata:1.0.2'
           }
