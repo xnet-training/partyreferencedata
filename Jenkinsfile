@@ -33,13 +33,16 @@ pipeline {
     stage('Desplegar microservicio') {
       steps {
         script {
-          sh '''
-             echo "Desplegando Microservicio"
+          sshPut remote: [name: 'docker-compose.yaml', host: '172.17.8.28', user: 'vagrant', password: 'vagrant', allowAnyHosts: true ], 
+                 from: './dev-environment/docker-compose.yaml',
+                 to: '/opt/devops/partyreferencedata/'
+          //sh '''
+          //   echo "Desplegando Microservicio"
              
-             sshpass -p vagrant scp ./dev-environment/docker-compose.yaml vagrant@172.17.8.28:/opt/devops/partyreferencedata/
-             sshpass -p vagrant scp ./dev-environment/.env vagrant@172.17.8.28:/opt/devops/partyreferencedata/
-             sshpass -p vagrant ssh vagrant@172.17.8.28 sh 'cd /opt/devops/partyreferencedata && docker compose -f docker-compose.yaml up -d'
-          '''
+          //   sshpass -p vagrant scp ./dev-environment/docker-compose.yaml vagrant@172.17.8.28:/opt/devops/partyreferencedata/
+          //   sshpass -p vagrant scp ./dev-environment/.env vagrant@172.17.8.28:/opt/devops/partyreferencedata/
+          //   sshpass -p vagrant ssh vagrant@172.17.8.28 sh 'cd /opt/devops/partyreferencedata && docker compose -f docker-compose.yaml up -d'
+          //'''
         }
       }
     }
