@@ -3,12 +3,12 @@ pipeline {
   //agent { docker { image 'maven:3.8.5-jdk-11' } }
 
   stages {
-    def remote = [:]
-    remote.name = 'docker-compose.yaml'
-    remote.host = '172.17.8.28'
-    remote.user = 'vagrant'
-    remote.password = 'vagrant'
-    remote.allowAnyHosts = true
+    //def remote = [:]
+    //remote.name = 'docker-compose.yaml'
+    //remote.host = '172.17.8.28'
+    //remote.user = 'vagrant'
+    //remote.password = 'vagrant'
+    //remote.allowAnyHosts = true
 
     stage('Check-Out') {
       steps {
