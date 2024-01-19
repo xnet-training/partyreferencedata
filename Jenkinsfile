@@ -33,9 +33,11 @@ pipeline {
     stage('Desplegar microservicio') {
       steps {
         script {
-          // sh 'echo "Desplegando Microservicio"'
-          sshpass -p "vagrant" scp docker-compose.yaml vagrant@172.17.8.28/opt/devops/partyreferencedata
-          sh 'cd dev-environment && docker compose -f docker-compose.yaml up -d'
+          sh '''
+             echo "Desplegando Microservicio"'
+             sshpass -p "vagrant" scp docker-compose.yaml vagrant@172.17.8.28/opt/devops/partyreferencedata
+             cd dev-environment && docker compose -f docker-compose.yaml up -d
+          '''
         }
       }
     }
