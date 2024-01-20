@@ -133,7 +133,7 @@ affinity:
   #   topologyKey: "kubernetes.io/hostname"
 
 scaledobject:
-  enabled: true
+  enabled: false
   namespace: microservices
   cpu:
     type: Utilization
@@ -141,6 +141,9 @@ scaledobject:
   memory:
     type: Utilization
     value: "80"
+
+monitoring:
+  enabled: false 
 
 useMongoDB: false
 useRabbitMQ: false
