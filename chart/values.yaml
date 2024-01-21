@@ -8,8 +8,8 @@ image:
   tag: 0.1.0
   pullPolicy: IfNotPresent
 
-imagePullSecrets:
-  - name: crossnetcorp-regcred
+imagePullSecrets: []
+#  - name: crossnetcorp-regcred
 
 nameOverride: ""
 

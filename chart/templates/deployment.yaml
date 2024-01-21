@@ -37,7 +37,7 @@ spec:
           command:
           - 'sh'
           - '-c'
-          - 'echo -e "Verificando disponibilidad de MySQL";while ! nc -z {{ .Values.schema.name }}-database-mysql.database.svc.cluster.local 3306; do sleep 1; printf "-"; done;echo -e "  >> MySQL DB Server iniciado";'
+          - 'echo -e "Verificando disponibilidad de MySQL";while ! nc -z {{ .Values.schema.name }}-mysql.database.svc.cluster.local 3306; do sleep 1; printf "-"; done;echo -e "  >> MySQL DB Server iniciado";'
           resources:
           {{- toYaml .Values.initContainers.resources | nindent 12 }}
       containers:

@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: partyreferencedata-secret
+  namespace: database
+data:
+  PASSWORD: c2VjcjN0IQ== 
+  USER: bWljcm9zZXJ2aWNpbw==
+  ROOT_PASSWORD: c2VjcjN0IQ==
+  DATABASE: cGFydHlyZWZlcmVuY2VkYXRh 
+---
+apiVersion: mysql.presslabs.org/v1alpha1
+kind: MysqlCluster
+metadata:
+  name: partyreferencedata
+  namespace: database
+spec:
+  replicas: 1
+  secretName: partyreferencedata-secret
+  mysqlConf:
+  #   innodb-buffer-size: 128M
+  volumeSpec:
+    persistentVolumeClaim:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+  #initFileExtraSQL:
+  #- "CREATE USER test@localhost"

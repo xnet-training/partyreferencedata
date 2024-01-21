@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.5.13</version>
-        <!--version>3.0.5</version-->
+	<!--version>3.0.5</version-->
         <relativePath/>
     </parent>
     <groupId>com.crossnetcorp.bian</groupId>
@@ -14,7 +14,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>SD Party Reference Data :: Main</name>
-    <description>BIAN Service Domain for Party Reference Data</description>
+    <description>BIAN SD for Party Reference Data</description>
     <properties>
         <java.version>15</java.version>
         <compiler-plugin.version>3.10.1</compiler-plugin.version>

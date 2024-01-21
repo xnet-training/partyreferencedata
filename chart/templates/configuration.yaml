@@ -24,7 +24,7 @@ data:
       main:
         allow-circular-references: true
       datasource:
-        url: "jdbc:mysql://{{ .Values.schema.name }}-database-mysql-master.database.svc.cluster.local/{{ .Values.schema.name }}"
+        url: "jdbc:mysql://{{ .Values.schema.name }}-mysql-master.database.svc.cluster.local/{{ .Values.schema.name }}"
         driver-class-name: com.mysql.cj.jdbc.Driver
       jpa:
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
