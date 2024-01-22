@@ -1,19 +1,21 @@
-create table partyreferencedata.tb_party(
+create table tb_party(
   id varchar(32) not null,
+  created_at datetime not null,
+  create_by varchar(32) not null,
   primary key (id)
 );
 
-create table partyreferencedata.tb_partyname (
+create table tb_partyname (
   id varchar(32) not null,
   party_id varchar(32) not null,
   kind varchar(20) not null,
   name varchar(60) not null,
   primary key (id)
 );
-alter table partyreferencedata.tb_partyname
+alter table tb_partyname
   add constraint fk_tb_partyname_party
   foreign key (party_id)
-  references partyreferencedata.tb_party(id);
+  references tb_party(id);
 
 -- create table if not exists tb_party (
 --     id varchar(32) not null,
@@ -22,25 +24,25 @@ alter table partyreferencedata.tb_partyname
 --     primary key (id)
 -- );
 
--- create table if not exists tb_people (
---     id varchar(32) not null,
---     birth_date date not null,
---     created_at datetime not null,
---     created_by varchar(32) not null,
---     primary key (id)
--- );
--- alter table tb_people add constraint fk_party
---   foreign key id references tb_party(id);
+create table if not exists tb_people (
+  id varchar(32) not null,
+  birth_date date not null,
+  created_at datetime not null,
+  created_by varchar(32) not null,
+  primary key (id)
+);
+alter table tb_people add constraint fk_people_party
+  foreign key (id) references tb_party(id);
 
--- create table if not exists tb_organization (
---     id varchar(32) not null,
---     registration_date date not null,
---     created_at datetime not null,
---     created_by varchar(32) not null,
---     primary key (id)
--- );
--- alter table tb_people add constraint fk_party
---   foreign key id references tb_party(id);
+create table if not exists tb_organization (
+  id varchar(32) not null,
+  registration_date date not null,
+  created_at datetime not null,
+  created_by varchar(32) not null,
+  primary key (id)
+);
+alter table tb_organization add constraint fk_organization_party
+  foreign key (id) references tb_party(id);
 
 -- create table if not exists tb_names (
 --     id varchar(32) not null,
