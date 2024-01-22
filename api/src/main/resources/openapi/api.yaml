@@ -12,7 +12,7 @@ info:
     url: https://www.crossnetcorp.com/license
   version: 1.0.0-SNAPSHOT
 servers:
-  - url: http://0.0.0.0:8082/customerreferencedata/api/v1
+  - url: http://0.0.0.0:8082/partyreferencedata/api/v1
     description: URL del endpoint
 tags:
   - name: party
